@@ -19,8 +19,8 @@ assets = { directory = "public" }
 
 # [[d1_databases]]
 # binding = "DB"
-# database_name = "my-database"
-# database_id = ""
+# database_name = "prod-bunnyai"
+# database_id = "caa21c45-3688-405b-a725-7b5ab7b83f2f"
 
 # [ai]
 # binding = "AI"
@@ -28,3 +28,5 @@ assets = { directory = "public" }
 # [observability]
 # enabled = true
 # head_sampling_rate = 1
+
+# [vars]
