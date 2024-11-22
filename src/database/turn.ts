@@ -1,23 +1,22 @@
-import { Chat } from "../types/entity/chat";
-import { CreateTurn, ReturnTurn, Turn } from "../types/entity/turn";
-import { ITurnRepository } from "../types/repository/turn";
-import { InMemoryChatRepository } from "./chat";
+import { CreateTurn, ReturnTurn, Turn } from '../types/entity/turn';
+import { ITurnRepository } from '../types/repository/turn';
+import { InMemoryChatRepository } from './chat';
 
 export class TurnRepository implements ITurnRepository {
-    private chat: Chat | null = null
-    private chatRepository: InMemoryChatRepository
+	private chat: InMemoryChatRepository | null = null;
 
-    constructor() {
-        this.chatRepository = new InMemoryChatRepository();
-    }
-    async createTurn(turn: CreateTurn): Promise<Turn> {
-        this.chat = await this.chatRepository.getById(turn.payload.turn.turn_key.chat_id)
+	createTurn(data: CreateTurn, chat: InMemoryChatRepository): void {
+		this.chat = chat;
+		const chatId = data.payload.turn.turn_key.chat_id;
+		const turn = data.payload.turn;
+		chat.appendMessage(chatId, turn);
+	}
 
-        if (this.chat === null) {
-            throw new Error('Chat not found')
-        }
-
-        this.chatRepository.appendMessage(turn.payload.turn.turn_key.chat_id, turn.payload.turn)
-        return turn.payload.turn
-    }
+	returnTurn(turn: ReturnTurn, chat: InMemoryChatRepository): Turn {
+		this.chat = chat;
+		const chatId = turn.payload.turn.turn_key.chat_id;
+		const returnTurn = turn.payload.turn;
+		chat.appendMessage(chatId, returnTurn);
+		return returnTurn;
+	}
 }

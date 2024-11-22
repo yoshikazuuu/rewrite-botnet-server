@@ -3,26 +3,30 @@ import { Turn } from "../types/entity/turn";
 import { IChatRepository } from "../types/repository/chat";
 
 export class InMemoryChatRepository implements IChatRepository {
-    private chats: Chat[] = [];
+    private chats: Chat[] = [
+        { id: '1', turns: [] },
+    ];
 
-    createChat(): Promise<Chat> {
+    createChat(): Chat {
         const chat: Chat = {
             id: Math.random().toString(36).substring(7),
             turns: [],
         };
         this.chats.push(chat);
-        return Promise.resolve(chat);
+        return chat;
     }
-    getById(id: string): Promise<Chat | null> {
+    getById(id: string): Chat | null {
         const chat = this.chats.find((c) => c.id === id);
-        return Promise.resolve(chat || null);
+        return chat || null;
     }
-    appendMessage(id: string, turn: Turn): Promise<void> {
+    appendMessage(id: string, turn: Turn): void {
         const chat = this.chats.find((c) => c.id === id);
         if (!chat) {
-            return Promise.reject(new Error('Chat not found'));
+            throw new Error('Chat not found');
         }
         chat.turns.push(turn);
-        return Promise.resolve();
+
+        console.log('Chat:', chat);
+
     }
 }

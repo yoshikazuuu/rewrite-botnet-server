@@ -1,5 +1,7 @@
-import { CreateTurn, ReturnTurn } from "../entity/turn";
+import { Chat } from '../entity/chat';
+import { CreateTurn, ReturnTurn } from '../entity/turn';
 
 interface ITurnRepository {
-    createTurn(turn: CreateTurn): Promise<Turn>;
+	createTurn(turn: CreateTurn, chat: InMemoryChatRepository): void;
+	returnTurn(turn: ReturnTurn, chat: InMemoryChatRepository): Turn;
 }
